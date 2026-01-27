@@ -1,5 +1,4 @@
 import asyncio
-import logging
 
 from aiogram import Bot, Dispatcher
 
@@ -7,6 +6,9 @@ from config import BOT_TOKEN
 from handlers import setup_routers
 from middlewares import LoggingMiddleware
 from commands import setup_bot_commands
+
+import logging
+logging.basicConfig(level=logging.INFO)
 
 
 async def main():

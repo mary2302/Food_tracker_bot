@@ -9,6 +9,7 @@ router = Router()
 
 @router.message(Command("recommend_food"))
 async def recommend_food(message: Message):
+    #Собираем топ-5 продуктов с низкой калорийностью по запросу пользователя
     parts = message.text.split(maxsplit=1)
     if len(parts) < 2:
         return await message.answer(

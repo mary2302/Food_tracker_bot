@@ -1,6 +1,7 @@
 from aiogram import Bot
 from aiogram.types import BotCommand
 
+#Чтобы команды вылезали подсказками в чате 
 async def setup_bot_commands(bot: Bot) -> None:
     await bot.set_my_commands(
         [

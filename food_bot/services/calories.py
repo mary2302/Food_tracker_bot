@@ -4,23 +4,19 @@ import aiohttp
 
 
 def parse_kcal_100g(nutr: dict) -> Optional[float]:
-    """
-    Достаёт kcal/100g из nutriments и безопасно приводит к float.
-    Возвращает None если значение отсутствует или некорректное.
-    """
+    # Получем ккал из nutriments
+    # Безопасно приводим к float или возвращаем None, если значение некорректное
     if not nutr:
         return None
 
     raw = nutr.get("energy-kcal_100g")
 
-    # иногда бывает только energy-kcal (без _100g) или другие варианты
     if raw is None:
         raw = nutr.get("energy-kcal")
 
     if raw is None:
         return None
 
-    # raw может быть числом/строкой
     try:
         if isinstance(raw, str):
             raw = raw.strip().replace(",", ".")
@@ -30,7 +26,6 @@ def parse_kcal_100g(nutr: dict) -> Optional[float]:
     except (TypeError, ValueError):
         return None
 
-    # отсекаем NaN/inf/нелепые значения
     if not math.isfinite(val) or val <= 0 or val > 2000:
         return None
 
@@ -38,6 +33,7 @@ def parse_kcal_100g(nutr: dict) -> Optional[float]:
 
 
 async def search_food_kcal_per_100g(query: str) -> Optional[Tuple[str, float]]:
+    #Асинхронный запрос в OpenFoodFacts на получение ккал по 'еде' от пользователя
     url = "https://world.openfoodfacts.org/cgi/search.pl"
     params = {
         "search_terms": query,
@@ -69,6 +65,8 @@ async def search_food_kcal_per_100g(query: str) -> Optional[Tuple[str, float]]:
 
 
 async def search_food_candidates(query: str, limit: int = 5) -> List[Tuple[str, float]]:
+    #Асинхронная функция для сбора кандидатов по названию продукта по минимальной калорийности (топ-5)
+    #Получает информацию из OpenFoodFacts
     url = "https://world.openfoodfacts.org/cgi/search.pl"
     params = {
         "search_terms": query,
@@ -99,6 +97,5 @@ async def search_food_candidates(query: str, limit: int = 5) -> List[Tuple[str, 
 
         items.append((name, kcal100))
 
-    # можно сортировать по ккал (например, чтобы показать "самые лёгкие" сверху)
     items.sort(key=lambda x: x[1])
     return items[:limit]

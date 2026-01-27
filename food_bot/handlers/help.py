@@ -27,6 +27,5 @@ HELP_TEXT = (
 
 @router.message(Command("help"))
 async def cmd_help(message: Message):
-    # parse_mode можно задавать глобально в Bot(...),
-    # но здесь на всякий случай используем Markdown
+    #команда /help - Выводит список доступных команд с описанием
     await message.answer(HELP_TEXT, parse_mode="Markdown")

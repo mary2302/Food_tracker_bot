@@ -1,13 +1,25 @@
 from dataclasses import dataclass
-from typing import Optional
-
 
 @dataclass(frozen=True)
 class WorkoutInput:
-    """Ввод пользователя: /log_workout <тип> <мин>"""
     workout_type: str
     minutes: int
+    """
+    ## WorkoutInput
 
+    Модель для входных данных тренировки от пользователя.
+
+    ### Поля
+    - `workout_type: str` — тип тренировки (строка, приводится к нижнему регистру).
+    - `minutes: int` — длительность тренировки в минутах.
+
+    ### Пример команды
+    `/log_workout бег 45`
+
+    ### Методы
+    - `parse_from_command(text: str) -> WorkoutInput` — парсит текст команды и валидирует ввод.
+      Бросает `ValueError` с понятным сообщением, если формат неверный.
+    """
     @classmethod
     def parse_from_command(cls, text: str) -> "WorkoutInput":
         parts = text.split()
@@ -29,12 +41,30 @@ class WorkoutInput:
 
 @dataclass(frozen=True)
 class WorkoutEntry:
-    """Готовая запись тренировки (после расчёта ккал)."""
     workout_type: str
     minutes: int
     burned_kcal: int
     extra_water_ml: int = 0
+    """
+    ## WorkoutEntry
 
+    Модель для сохранённой записи тренировки: содержит исходные данные + рассчитанные значения.
+
+    ### Поля
+    - `workout_type: str` — тип тренировки.
+    - `minutes: int` — длительность тренировки.
+    - `burned_kcal: int` — сожжённые калории (готовое число, рассчитанное снаружи).
+    - `extra_water_ml: int = 0` — дополнительная вода к цели (мл), по умолчанию 0.
+
+    ### Логика воды
+    Добавочная вода: `+200 мл` за каждые полные `30 минут` тренировки.
+
+    ### Методы
+    - `from_input(inp: WorkoutInput, burned_kcal: int) -> WorkoutEntry` —
+      создаёт запись из `WorkoutInput`, добавляя:
+      - `burned_kcal`
+      - `extra_water_ml` по формуле.
+    """
     @classmethod
     def from_input(cls, inp: WorkoutInput, burned_kcal: int) -> "WorkoutEntry":
         extra_water = (inp.minutes // 30) * 200

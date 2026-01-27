@@ -6,10 +6,6 @@ from typing import List
 
 
 def last_n_days(n: int = 14) -> List[str]:
-    """
-    Возвращает список дат (isoformat) за последние n дней, включая сегодня,
-    в порядке слева-направо (от старых к новым).
-    """
     if n < 2:
         n = 2
     d0 = date.today()

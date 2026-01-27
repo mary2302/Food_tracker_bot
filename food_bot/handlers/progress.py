@@ -9,6 +9,12 @@ router = Router()
 
 @router.message(Command("check_progress"))
 async def check_progress(message: Message):
+    """
+    Выводим прогресс пользователя за день
+    - сколько воды выпито и осталось
+    - сколько ккал потреблено и осталось
+    - результаты тренировок
+    """
     user = ensure_user(message.from_user.id)
     if not user.get("calorie_goal") or not user.get("water_goal"):
         return await message.answer("Сначала настройте профиль: /set_profile")
@@ -38,6 +44,7 @@ async def check_progress(message: Message):
 
 @router.message(Command("reset_today"))
 async def reset_today(message: Message):
+    #Удаление всех данных за текущий день
     user = ensure_user(message.from_user.id)
     user["logged_water"] = 0
     user["logged_calories"] = 0

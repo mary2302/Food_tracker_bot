@@ -4,7 +4,7 @@ import aiohttp
 
 from config import OPENWEATHER_API_KEY as key
 
-
+#Асинхронный запрос на получение погоды в выбранном городе через OpenWeatherMap API
 async def get_city_temp_c(city: str) -> Optional[float]:
     if not key:
         return None

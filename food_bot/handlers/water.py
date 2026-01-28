@@ -34,16 +34,7 @@ async def log_water(message: Message):
     ### Используемые поля
     - `user["water_goal"]` — дневная цель воды (мл).
     - `user["burned_water"]` — добавка воды от тренировок за сегодня (мл).
-    - `day["water"]` — сколько воды выпито за день (мл).
-
-    ### Как считается остаток
-    ```text
-    left = max(0, water_goal - drank_today + burned_water)
-    ```
-    Где:
-    - `water_goal` — базовая цель воды,
-    - `drank_today` — выпитая вода за сегодня (`day["water"]`),
-    - `burned_water` — добавка воды от тренировок (если тренировки были).
+    - `user["logged_water"]` — сколько воды выпито за день (мл).
 
     ### Ответ пользователю
     Пример:

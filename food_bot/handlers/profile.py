@@ -225,7 +225,7 @@ async def cmd_profile(message: Message):
     burned_calories = user.get("burned_calories", 0)
 
     net_calories = logged_calories - burned_calories
-    water_left = max(0, int(user["water_goal"] - logged_water))
+    water_left = max(0, int(user["water_goal"] - logged_water + user["burned_water"]))
     cal_left = int(user["calorie_goal"] - net_calories)
 
     city = hd.quote(str(user["city"]))

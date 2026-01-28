@@ -67,6 +67,7 @@ async def log_water(message: Message):
 
     day = ensure_day(user, today_key())
     day["water"] += ml
+    user["logged_water"] = day["water"]
 
     left = max(0, user["water_goal"] - day["water"] + user["burned_water"])
     await message.answer(f"💧 Записано: {ml} мл.\nОсталось до нормы: {left} мл.")

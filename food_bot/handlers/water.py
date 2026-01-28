@@ -65,9 +65,10 @@ async def log_water(message: Message):
     except Exception:
         return await message.answer("Введите количество мл числом, например /log_water 250")
 
-    day = ensure_day(user, today_key())
-    day["water"] += ml
-    user["logged_water"] = day["water"]
+    user["logged_water"] += ml
 
-    left = max(0, user["water_goal"] - day["water"] + user["burned_water"])
+    day = ensure_day(user, today_key())
+    day["water"] = user["logged_water"]
+
+    left = max(0, user["water_goal"] - user["logged_water"] + user["burned_water"])
     await message.answer(f"💧 Записано: {ml} мл.\nОсталось до нормы: {left} мл.")

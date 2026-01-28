@@ -62,11 +62,11 @@ async def log_workout(message: Message):
     burned = estimate_workout_kcal(inp.workout_type, inp.minutes, user.get("weight"))
     entry = WorkoutEntry.from_input(inp, burned)
 
-    day = ensure_day(user, today_key())
-    day["burned"] += entry.burned_kcal
-
-    user["burned_calories"] = day["burned"]
+    user["burned_calories"] += entry.burned_kcal
     user["burned_water"] += entry.extra_water_ml
+
+    day = ensure_day(user, today_key())
+    day["burned"] = user["burned_calories"]
 
     tip = f"\nДополнительно: выпейте {entry.extra_water_ml} мл воды." if entry.extra_water_ml > 0 else ""
     await message.answer(

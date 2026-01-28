@@ -219,14 +219,16 @@ async def cmd_profile(message: Message):
 
     sex = "жен" if user.get("sex") == "f" else "муж"
 
-    # Текущие прогрессы (если они есть)
-    logged_water = user.get("logged_water", 0)
-    logged_calories = user.get("logged_calories", 0)
-    burned_calories = user.get("burned_calories", 0)
+    water_goal = user["water_goal"]
+    w_drunk = user["logged_water"]
+    w_burned = user["burned_water"]
+    w_left = max(0, water_goal - w_drunk + w_burned)
 
-    net_calories = logged_calories - burned_calories
-    water_left = max(0, int(user["water_goal"] - logged_water + user["burned_water"]))
-    cal_left = int(user["calorie_goal"] - net_calories)
+    cal_goal = user["calorie_goal"]
+    eaten = user["logged_calories"]
+    burned = user["burned_calories"]
+    balance = eaten - burned
+    cal_left = cal_goal - balance
 
     city = hd.quote(str(user["city"]))
     sex_safe = hd.quote(str(sex))
@@ -243,10 +245,10 @@ async def cmd_profile(message: Message):
         f"• Вода: <b>{user['water_goal']}</b> мл/день\n"
         f"• Калории: <b>{user['calorie_goal']}</b> ккал/день\n\n"
         "📊 <b>Сегодня:</b>\n"
-        f"• Выпито воды: <b>{logged_water}</b> мл (осталось <b>{water_left}</b> мл)\n"
-        f"• Съедено: <b>{logged_calories}</b> ккал\n"
-        f"• Сожжено тренировками: <b>{burned_calories}</b> ккал\n"
-        f"• Баланс: <b>{net_calories}</b> ккал (осталось <b>{cal_left}</b> ккал)\n\n"
+        f"• Выпито воды: <b>{w_drunk}</b> мл (осталось <b>{w_left}</b> мл)\n"
+        f"• Съедено: <b>{eaten}</b> ккал\n"
+        f"• Сожжено тренировками: <b>{burned}</b> ккал\n"
+        f"• Баланс: <b>{balance}</b> ккал (осталось <b>{cal_left}</b> ккал)\n\n"
         "⚙️ Обновить профиль: /set_profile"
     )
 

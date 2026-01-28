@@ -136,10 +136,10 @@ async def log_food_grams(message: Message, state: FSMContext):
     product = FoodProduct.validate(name=pf.name, kcal_per_100g=pf.kcal_per_100g)
     entry = FoodEntry.from_product_and_input(product, intake)
 
-    day = ensure_day(user, today_key())
-    day["eaten"] += entry.kcal
+    user["logged_calories"] += entry.kcal
 
-    user["logged_calories"] = day["eaten"]
+    day = ensure_day(user, today_key())
+    day["eaten"] = user["logged_calories"]
 
     pending_food.pop(message.from_user.id, None)
     await state.clear()
